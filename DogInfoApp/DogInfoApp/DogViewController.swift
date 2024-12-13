@@ -59,23 +59,16 @@ class DogViewController: UIViewController, NetworkingDelegate
     @IBAction func saveToCoreData(_ sender: Any) {
         
         
-        let context = CoreDataManager.shared.persistentContainer.viewContext
+        let imageData = dogImage.image?.jpegData(compressionQuality: 1.0) ?? Data()
         
-        let dogEntity = CoreDogs(context: context)
-        
-        if let imageData = dogImage.image?.jpegData(compressionQuality: 1.0) {
-            dogEntity.image = imageData
-        } else {
-            dogEntity.image = Data()
-        }
-        
-        
-        dogEntity.name = dog?.name ?? "N/A"
-        dogEntity.temperament = dog?.temperament ?? "N/A"
-        dogEntity.bred_for = dog?.bred_for ?? "N/A"
-        dogEntity.life_span = dog?.life_span ?? "N/A"
-        dogEntity.breed_group = dog?.breed_group ?? "N/A"
-        
+        CoreDataManager.shared.addNewDog(
+            name: dog?.name ?? "N/A",
+            temperament: dog?.temperament ?? "N/A",
+            breed_for: dog?.bred_for ?? "N/A",
+            life_span: dog?.life_span ?? "N/A",
+            breed_group: dog?.breed_group ?? "N/A",
+            image: imageData
+        )
         
         let alert = UIAlertController(title: "Success", message: "Dog details saved!", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
